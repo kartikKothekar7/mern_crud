@@ -2,7 +2,7 @@ const Note=require('../models/Note')
 
 const getNotes =async (req,res)=>{
     try{
-        const notes=await Note.find()
+        const notes=await Note.find({user:req.user._id}).sort({createdAt:-1});
         res.status(200).json(notes) 
     }
     catch(error)
@@ -35,7 +35,8 @@ const createNote=async (req,res)=>{
         }
         const newNote=await Note.create({
             title,
-            content
+            content,
+            user:req.user._id,
         })
     
         return res.status(201).json(newNote);
@@ -64,20 +65,31 @@ const updateNote=async (req,res)=>{
     }
 }
 
-const deleteNote=async (req,res)=>{
-    try{
-        const deletedNote=await Note.findByIdAndDelete(req.params.id)
+const deleteNote = async (req, res) => {
+  try {
+    // 1. Find note
+    const note = await Note.findById(req.params.id);
 
-        if(!deletedNote)
-        {
-            return res.status(404).json({message:"note not found"});
-        }
-        res.status(200).json({message:"Note deleted successfully"});
+    // 2. Check if note exists
+    if (!note) {
+      return res.status(404).json({ message: "Note not found" });
     }
-    catch(error)
-    {
-        res.status(500).json({message:error.message});
+
+    // 3. Check ownership
+    if (note.user.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: "Not authorized" });
     }
-}
+
+    // 4. Delete note
+    await note.deleteOne();
+
+    // 5. Respond
+    res.status(200).json({ message: "Note deleted successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 module.exports={getNotes,getNote,createNote,updateNote,deleteNote}
