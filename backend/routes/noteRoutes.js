@@ -3,10 +3,10 @@ const {getNotes,getNote,createNote,updateNote,deleteNote}=require('../controller
 const {protect}=require('../middleware/authMiddleware')
 const router=express.Router();
 
-router.get('/',getNotes);
-router.get('/:id',getNote);
-router.post('/',createNote);
-router.put('/:id',updateNote);
-router.delete('/:id',deleteNote);
+router.get('/',protect,getNotes);
+router.get('/:id',protect,getNote);
+router.post('/',protect,createNote);
+router.put('/:id',protect,updateNote);
+router.delete('/:id',protect,deleteNote);
 
 module.exports=router;
