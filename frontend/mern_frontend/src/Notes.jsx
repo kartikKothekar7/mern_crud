@@ -71,7 +71,7 @@ const Notes = () => {
   }, []);
 
   return (
-    <div className="bg-gray-800 min-h-screen w-screen text-white flex flex-col items-center py-6">
+    <div className="bg-gray-800 min-h-screen w-screen text-white flex flex-col items-center py-6 overflow-hidden">
       <h1 className="text-3xl mb-4">Notes App</h1>
 
       {/* Add Note Form */}

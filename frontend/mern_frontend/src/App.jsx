@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Notes from "./Notes";
-import Navbar from "./pages/Navbar";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
